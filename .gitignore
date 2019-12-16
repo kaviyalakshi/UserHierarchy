@@ -1,0 +1,10 @@
+/target/
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+*.DS_Store
+*.cmd
+*.md
+
+
