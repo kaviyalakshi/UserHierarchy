@@ -3,7 +3,6 @@ package com.pyt.uh.repository;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -26,35 +25,43 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepository extends JdbcRealm{
+public class UserRepository{
+	
 	private static Logger log = LoggerFactory.getLogger(UserRepository.class);
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
     public List<String> getUserName(String name,String password){
-    	String pass1 = password;
-		List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );	
-		for(Map<String,Object> detail : queryAnswers) {
-			if(pass1.equals((detail.get("password")).toString())) {
-				System.out.println("yes matched");
-//				IniRealm iniRealm = new IniRealm("classpath:application.properties");
-//				SecurityManager securityManager = new DefaultSecurityManager(iniRealm);
-//				SecurityUtils.setSecurityManager(securityManager);
-//				Subject currentUser = SecurityUtils.getSubject();
-				
-			    Subject currentUser = SecurityUtils.getSubject();
-			    Session session = currentUser.getSession();
+   	String pass1 = password;
+//		List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );	
+//		for(Map<String,Object> detail : queryAnswers) {
+//			if(pass1.equals((detail.get("password")).toString())) {
+//				System.out.println("yes matched");
+//				myUserRealm.data(name, password);
+				IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
+				SecurityManager securityManager = new DefaultSecurityManager(iniRealm);
+				SecurityUtils.setSecurityManager(securityManager);
+				Subject currentUser = SecurityUtils.getSubject();
+			    System.out.println("CURRENT USER" + currentUser);
+			    if (!currentUser.isAuthenticated()) {  
+			    	List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );
+					for(Map<String,Object> detail : queryAnswers) {
+						System.out.println("coming inn"+detail);
+						if(pass1.equals((detail.get("password")).toString())) {
+							UsernamePasswordToken token = new UsernamePasswordToken(name,password);
+					   	    System.out.println("TOKEN" + token);
+						    token.setRememberMe(true);  
+						    currentUser.login(token); 
+					    	System.out.println("yes");
+    			}
+				Session session = currentUser.getSession();
 			    session.setAttribute("someKey", "aValue");
 			    String value = (String) session.getAttribute("someKey");
 			    if (value.equals("aValue")) {
-			    log.info("Retrievedcorrect value! [" + value + "]");
+			    log.info("Retrvedcorrect value! [" + value + "]");
 			    }
-			    if (!currentUser.isAuthenticated()) {               
-					UsernamePasswordToken token = new UsernamePasswordToken(name,password);
-			   	    System.out.println(token+"tokennn");
-				    token.setRememberMe(true);  
-				    
-			    }
+			    System.out.println("current user "+currentUser);
+//			    }
 //					  try {                                             
 //					      currentUser.login(token);                       
 //					  } catch (UnknownAccountException uae) {           
@@ -67,9 +74,10 @@ public class UserRepository extends JdbcRealm{
 //					      log.error("Unexpected Error!", ae);           
 //					  }                                                 
 //					}
-			}
-			System.out.println(detail);
-		}
+//			System.out.println(detail);
+//		}
+			    }
+			    }
 		return null;		
 	}
     
@@ -79,6 +87,12 @@ public class UserRepository extends JdbcRealm{
 		for(Map<String,Object> detail : queryAnswers) {
 			if(email.equals((detail.get("name")).toString())) {
 				System.out.println("yes matched");
+//				UsernamePasswordToken token = new UsernamePasswordToken(email,null);
+//				OAuthUserToken oToken = (OAuthUserToken) token;
+//		        String type = oToken.getOauthType();
+//		        String openId = oToken.getOpenID();
+//		   	    System.out.println(token+"tokennn");
+//			    token.setRememberMe(true);  
 			}
 			System.out.println(detail);
 		}
