@@ -33,50 +33,41 @@ public class UserRepository{
 	
     public List<String> getUserName(String name,String password){
    	String pass1 = password;
-//		List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );	
-//		for(Map<String,Object> detail : queryAnswers) {
-//			if(pass1.equals((detail.get("password")).toString())) {
-//				System.out.println("yes matched");
-//				myUserRealm.data(name, password);
-				IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
-				SecurityManager securityManager = new DefaultSecurityManager(iniRealm);
-				SecurityUtils.setSecurityManager(securityManager);
-				Subject currentUser = SecurityUtils.getSubject();
-			    System.out.println("CURRENT USER" + currentUser);
-			    if (!currentUser.isAuthenticated()) {  
-			    	List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );
-					for(Map<String,Object> detail : queryAnswers) {
-						System.out.println("coming inn"+detail);
-						if(pass1.equals((detail.get("password")).toString())) {
-							UsernamePasswordToken token = new UsernamePasswordToken(name,password);
-					   	    System.out.println("TOKEN" + token);
-						    token.setRememberMe(true);  
-						    currentUser.login(token); 
-					    	System.out.println("yes");
-    			}
-				Session session = currentUser.getSession();
-			    session.setAttribute("someKey", "aValue");
-			    String value = (String) session.getAttribute("someKey");
-			    if (value.equals("aValue")) {
-			    log.info("Retrvedcorrect value! [" + value + "]");
+	IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
+	SecurityManager securityManager = new DefaultSecurityManager(iniRealm);
+	SecurityUtils.setSecurityManager(securityManager);
+	Subject currentUser = SecurityUtils.getSubject();
+    System.out.println("CURRENT USER" + currentUser);
+    if (!currentUser.isAuthenticated()) {  
+    	List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select password from user where name = '" + name + "' " );
+		for(Map<String,Object> detail : queryAnswers) {
+			System.out.println("coming inn"+detail);
+			if(pass1.equals((detail.get("password")).toString())) {
+				UsernamePasswordToken token = new UsernamePasswordToken(name,password);
+		   	    System.out.println("TOKEN" + token);
+			    token.setRememberMe(true);  
+			    System.out.println("yes");
+			    try {                                             
+				      currentUser.login(token);                       
+				  } catch (UnknownAccountException uae) {           
+				      log.error("Username Not Found!", uae);        
+				  } catch (IncorrectCredentialsException ice) {     
+				      log.error("Invalid Credentials!", ice);       
+				  } catch (LockedAccountException lae) {            
+				      log.error("Your Account is Locked!", lae);    
+				  } catch (AuthenticationException ae) {            
+				      log.error("Unexpected Error!", ae);           
+				  }                                                 
+		    	
+	Session session = currentUser.getSession();
+    session.setAttribute(name, token);
+    String value = (String) session.getAttribute(name);
+    if (value.equals(name)) {
+    log.info("Retrvedcorrect value! [" + value + "]");
+    }
+    System.out.println("current user "+currentUser);
 			    }
-			    System.out.println("current user "+currentUser);
-//			    }
-//					  try {                                             
-//					      currentUser.login(token);                       
-//					  } catch (UnknownAccountException uae) {           
-//					      log.error("Username Not Found!", uae);        
-//					  } catch (IncorrectCredentialsException ice) {     
-//					      log.error("Invalid Credentials!", ice);       
-//					  } catch (LockedAccountException lae) {            
-//					      log.error("Your Account is Locked!", lae);    
-//					  } catch (AuthenticationException ae) {            
-//					      log.error("Unexpected Error!", ae);           
-//					  }                                                 
-//					}
-//			System.out.println(detail);
-//		}
-			    }
+		}
 			    }
 		return null;		
 	}
@@ -87,54 +78,10 @@ public class UserRepository{
 		for(Map<String,Object> detail : queryAnswers) {
 			if(email.equals((detail.get("name")).toString())) {
 				System.out.println("yes matched");
-//				UsernamePasswordToken token = new UsernamePasswordToken(email,null);
-//				OAuthUserToken oToken = (OAuthUserToken) token;
-//		        String type = oToken.getOauthType();
-//		        String openId = oToken.getOpenID();
-//		   	    System.out.println(token+"tokennn");
-//			    token.setRememberMe(true);  
 			}
 			System.out.println(detail);
 		}
 		return null;		
 	}
   
-    
-//    SecurityUtils.setSecurityManager(securityManager);
-//    currentUser = SecurityUtils.getSubject();
-//    Session session = currentUser.getSession();
-//     session.setAttribute("someKey", "aValue");
-//     String value = (String) session.getAttribute("someKey");
-//     if (value.equals("aValue")) {
-//     log.info("Retrievedcorrect value! [" + value + "]");
-//     }
-//    // let's login the current user so we can check against roles and
-//     // permissions:
-//     if (!currentUser.isAuthenticated()) {
-//     UsernamePasswordToken token = new UsernamePasswordToken(
-//     username, pass);
-//     token.setRememberMe(true);
-//     currentUser.login(token);
-//    }
-    
-//    @Override
-//    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-//    throws AuthenticationException {
-//    UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-//
-//    String username = upToken.getUsername();
-//    checkNotNull(username, "Null usernames are not allowed by this realm.");
-//
-//    String password = pass;
-//    checkNotNull(password, "No account found for user [" + username + "]");
-//
-//    return
-//    new SimpleAuthenticationInfo(username, password.toCharArray(), getName());
-//    }
-//
-//    private void checkNotNull(Object reference, String message) {
-//    if (reference == null) {
-//    throw new AuthenticationException(message);
-//    }
-//    }
-    }
+}
