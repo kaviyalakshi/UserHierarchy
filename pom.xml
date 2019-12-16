@@ -11,12 +11,17 @@
 	<groupId>com.pyt.uh</groupId>
 	<artifactId>UserHirearchy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>UserHirearchy</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
+		<spring-boot.version>2.2.1.RELEASE</spring-boot.version>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+		<shiro.version>1.4.0</shiro.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -32,7 +37,7 @@
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-all</artifactId>
-		    <version>1.4.0</version>
+		    <version>${shiro.version}</version>
 		    <type>pom</type>
 		</dependency>
 		<dependency>
