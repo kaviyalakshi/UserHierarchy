@@ -8,6 +8,7 @@ public class User {
 	private String password;
 	private String designation;
 	private Integer active;
+	private String emailid;
 	public Integer getId() {
 		return id;
 	}
@@ -17,8 +18,14 @@ public class User {
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(String emailid) {
 		this.name = name;
+	}
+	public String getemailid() {
+		return emailid;
+	}
+	public void setemailid(String emailid) {
+		this.emailid = emailid;
 	}
 	public String getUsername() {
 		return username;
