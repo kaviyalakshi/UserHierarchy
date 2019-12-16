@@ -1,5 +1,7 @@
 package com.pyt.uh.controller;
 
+import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +28,6 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 
-//	@Autowired
-//	MyUserRealm myUserRealm;
-	
 	@PostMapping
 	public String user()
 	{
@@ -42,9 +41,9 @@ public class UserController {
 		
 	}
 	
-	@PostMapping(path="/gauth/{mailid}")
-	public List<String> getUsername(@RequestBody User user) {
-		return userRepository.getGUser(user.getemailid());
-		
+	@RequestMapping(value="/glogin")
+	public Principal user(Principal principal) {
+		userRepository.getGUser(principal, null);
+		return principal;
 	}
 }

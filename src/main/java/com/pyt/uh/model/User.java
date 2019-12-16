@@ -1,5 +1,8 @@
 package com.pyt.uh.model;
 
+import org.springframework.data.relational.core.mapping.Table;
+
+@Table(value="user")
 public class User {
 	
 	private Integer id;

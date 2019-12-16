@@ -1,5 +1,6 @@
 package com.pyt.uh.repository;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.token.Token;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Repository;
+
+import com.pyt.uh.model.User;
+
+
 
 @Repository
 public class UserRepository{
@@ -70,16 +77,10 @@ public class UserRepository{
 		return null;		
 	}
     
-    public List<String> getGUser(String emailid){
-    	String email = emailid;
-		List<Map<String, Object>> queryAnswers = jdbcTemplate.queryForList("select name from user where emailid = '" + emailid + "' " );	
-		for(Map<String,Object> detail : queryAnswers) {
-			if(email.equals((detail.get("name")).toString())) {
-				System.out.println("yes matched");
-			}
-			System.out.println(detail);
-		}
-		return null;		
+    public List<String> getGUser(Object principal,OAuth2Authentication authentication){
+    	LinkedHashMap<String, Object> properties = (LinkedHashMap<String, Object>) authentication.getUserAuthentication().getDetails();
+        return (List<String>) properties.get("token");	
 	}
+    
   
 }
