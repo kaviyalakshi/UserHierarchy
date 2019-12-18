@@ -1,8 +1,5 @@
 package com.pyt.uh.model;
 
-import org.springframework.data.relational.core.mapping.Table;
-
-@Table(value="user")
 public class User {
 	
 	private Integer id;
@@ -21,14 +18,8 @@ public class User {
 	public String getName() {
 		return name;
 	}
-	public void setName(String emailid) {
+	public void setName(String name) {
 		this.name = name;
-	}
-	public String getemailid() {
-		return emailid;
-	}
-	public void setemailid(String emailid) {
-		this.emailid = emailid;
 	}
 	public String getUsername() {
 		return username;
@@ -54,6 +45,11 @@ public class User {
 	public void setActive(Integer active) {
 		this.active = active;
 	}
-	
+	public String getEmailid() {
+		return emailid;
+	}
+	public void setEmailid(String emailid) {
+		this.emailid = emailid;
+	}
 	
 }
