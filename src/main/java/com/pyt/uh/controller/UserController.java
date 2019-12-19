@@ -42,6 +42,7 @@ public class UserController{
 	
 //	@GetMapping(value="/glogin")
 //	public Principal user(Principal principal) {
+//		
 //		userRepository.getGUser(principal, null);
 //		return principal;
 //	}
@@ -76,4 +77,15 @@ public class UserController{
 		return userRepository.ValidatePolicy(user_id,id);
 	}
 	
+	@GetMapping(value="/addNew")
+	public List<Map<String, Object>> AddNew(@RequestBody User user) {
+		
+		return userRepository.new_user(user.getEmailid(),user.getName(),user.getPassword());
+	}
+	
+	@GetMapping(value="/RemoveUser")
+	public List<Map<String, Object>> RemoveUser(@RequestBody User user) {
+		
+		return userRepository.remove_user(user.getName());
+	}
 }
